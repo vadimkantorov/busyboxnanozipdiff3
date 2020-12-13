@@ -21,4 +21,4 @@ jobs:
         run: make $MAKEFLAGS build/native/busybox URL=$URL
 
       - name: Build Wasm BusyBox
-        run: make $MAKEFLAGS build/wasm/busybox.js URL=$URL
+        run: make $MAKEFLAGS build/wasm/busybox_unstripped.js URL=$URL

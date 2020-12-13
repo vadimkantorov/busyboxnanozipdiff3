@@ -12,5 +12,5 @@ Patches not used for now:
 make build/native/busybox
 
 # wasm version
-make build/wasm/busybox.js
+make build/wasm/busybox_unstripped.js
 ```
