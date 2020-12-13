@@ -14,7 +14,7 @@ build/native/busybox: source/busybox.tar.gz
 
 build/wasm/busybox: source/busybox.tar.gz
 	mkdir -p build/wasm
-	#tar -xf source/busybox.tar.gz --strip-components=1 --directory=build/wasm
+	tar -xf source/busybox.tar.gz --strip-components=1 --directory=build/wasm
 	cp .config build/wasm
 	mkdir -p build/wasm/arch/em 
 	echo 'SKIP_STRIP=y' > build/wasm/arch/em/Makefile
