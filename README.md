@@ -5,3 +5,12 @@ Inspired by https://github.com/tbfleming/em-busybox and https://github.com/tbfle
 Patches not used for now:
 - https://github.com/tbfleming/em-busybox/commit/8c592ed5e13a7c35e0e318112bbdbc281798b6d7
 - https://github.com/tbfleming/em-busybox/commit/5fbe7c016af61b21c073652fed3b4ee4d744238d
+
+
+```shell
+# native version 
+make build/native/busybox
+
+# wasm version
+make build/wasm/busybox.js
+```
