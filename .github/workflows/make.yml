@@ -1,0 +1,28 @@
+name: make
+
+on: workflow_dispatch
+
+env:
+  URL: https://busybox.net/downloads/busybox-1.32.0.tar.bz2
+  MAKEFLAGS: -j2
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Setup Emscripten
+        uses: mymindstorm/setup-emsdk@v7
+        with:
+          version: 2.0.5
+
+      - uses: actions/checkout@v2
+
+      - name: Build Native BusyBox
+        run: |
+          export MAKEFLAGS
+          make build/native/busybox URL=$URL
+
+      - name: Build Wasm Perl
+        run: |
+          export MAKEFLAGS
+          make build/wasm/busybox URL=$URL
