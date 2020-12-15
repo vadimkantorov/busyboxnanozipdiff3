@@ -1,3 +1,5 @@
+## BusyBox + nanozip + Emscripten
+
 Inspired by https://github.com/tbfleming/em-busybox and https://github.com/tbfleming/em-shell, this repo contains build script of BusyBox for WebAssembly without being a full fork of BusyBox, so upgrading to a new version of BusyBox is easier.
 
 In addition to BusyBox build script, this repo also contains a [custom](https://git.busybox.net/busybox/plain/docs/new-applet-HOWTO.txt) BusyBox applet [nanozip](./nanozip.c) - [miniz](https://github.com/richgel999/miniz)-based imitation of `zip` utility: `busybox nanozip [-r] [[-x EXCLUDED_PATH] ...] OUTPUT_NAME.zip INPUT_PATH [...]`.
