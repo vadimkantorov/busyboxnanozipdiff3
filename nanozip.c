@@ -18,54 +18,96 @@
 	#endif
 #endif
 
+#define NANOZIP_FAIL(msg) {puts(msg); return EXIT_FAILURE;}
+
+#include <ftw.h>
 #include <libbb.h>
 #include "miniz.c"
 
-//TODO: traverse directory with https://stackoverflow.com/questions/8436841/how-to-recursively-list-directories-in-c-on-linux
-//TODO: support exclude
 //TODO: make sure for empty directories
+
+enum { MAX_FILE_PATH_LENGTH = 1024, MAX_EXCLUDE_PATHS = 16, MAX_INPUT_PATHS = 16, USE_FDS = 15 };
+
+char* exclude[MAX_EXCLUDE_PATHS];
+char* input[MAX_INPUT_PATHS];
+char file_path_buffer[MAX_FILE_PATH_LENGTH];
+
+char* output;
+int recurse, num_input, num_exclude;
+
+void* ptr_zip;
+
+int proc_entry(const char *file_path_src, const struct stat *info, const int typeflag, struct FTW *pathinfo)
+{
+	char *file_path_dst;
+    int add;
+    
+    add = 1;
+
+    for(int i = 0; i < num_exclude; i++)
+        if(0 == strcmp(exclude[i], file_path_src))
+            add = 0;
+    
+    if(add)
+    {
+        file_path_dst = file_path_src;
+
+        if(typeflag == FTW_D)
+        {
+            if(file_path_src[strlen(file_path_src) - 1] != '/')
+            {
+                file_path_dst = file_path_buffer;
+                snprintf(file_path_dst, MAX_FILE_PATH_LENGTH, "%s/", file_path_src);
+            }
+
+            mz_zip_writer_add_mem(ptr_zip, file_path_dst, NULL, 0, 0);
+        }
+        else if(typeflag == FTW_F)
+            mz_zip_writer_add_file(ptr_zip, file_path_dst, file_path_src, "", 0, MZ_BEST_COMPRESSION);
+    }
+    
+    return 0;
+}
 
 int nanozip_main(int argc, char *argv[])
 {
-	const char* zip_filepath, *filepath_src, *filename_dst;
-	mz_zip_archive zip;
-	mz_bool status; 
-	
-	zip_filepath = argv[1];
-	remove(zip_filepath);
+    mz_zip_archive zip;
+    struct stat st;
 
-	memset(&zip, 0, sizeof(zip));
-	status = mz_zip_writer_init_file(&zip, zip_filepath, 0);
-    if (!status)
+    for(int i = 1; i < argc; i++)
     {
-        puts("mz_zip_writer_init_file failed!");
-        return EXIT_FAILURE;
+        if(0 == strcmp("-r", argv[i]))
+            recurse = 1;
+        else if(0 == strcmp("-x", argv[i]))
+        {
+            assert(i + 1 < argc);
+            exclude[num_exclude++] = argv[++i];
+        }
+        else if(output == NULL)
+            output = argv[i];
+        else
+            input[num_input++] = argv[i];
     }
 
-	for (int i = 2; i < argc; i++)
-	{
-		filepath_src = argv[i];
-		filename_dst = argv[i];
+	remove(output);
 
-		status = mz_zip_writer_add_file(&zip, filename_dst, filepath_src, "", 0, MZ_BEST_COMPRESSION);
-		if (!status)
-		{
-			puts("mz_zip_writer_add_file failed!");
-			return EXIT_FAILURE;
-		}
+    ptr_zip = &zip;
+	memset(ptr_zip, 0, sizeof(zip));
+    mz_zip_writer_init_file(ptr_zip, output, 0);
+
+    for (int i = 0; i < num_input; i++)
+	{
+        if(stat(input[i], &st) == 0 && (st.st_mode & S_IFDIR) != 0)
+        {
+            if(recurse == 1)
+                nftw(input[i], proc_entry, USE_FDS, FTW_PHYS);
+        }
+        else
+            proc_entry(input[i], NULL, FTW_F, NULL);
 	}
 
-    status = mz_zip_writer_finalize_archive(&zip);
-    if (!status)
-    {
-        puts("mz_zip_writer_finalize_archive failed!");
-        return EXIT_FAILURE;
-    }
-	status = mz_zip_writer_end(&zip);
-    if (!status)
-    {
-        puts("mz_zip_writer_end failed!");
-        return EXIT_FAILURE;
-    }
-	return EXIT_SUCCESS;
+    mz_zip_writer_finalize_archive(ptr_zip);
+    mz_zip_writer_end(ptr_zip);
+	
+    return 0;
 }
