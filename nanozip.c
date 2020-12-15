@@ -21,6 +21,10 @@
 #include <libbb.h>
 #include "miniz.c"
 
+//TODO: traverse directory with https://stackoverflow.com/questions/8436841/how-to-recursively-list-directories-in-c-on-linux
+//TODO: support exclude
+//TODO: make sure for empty directories
+
 int nanozip_main(int argc, char *argv[])
 {
 	const char* zip_filepath, *filepath_src, *filename_dst;
@@ -31,7 +35,12 @@ int nanozip_main(int argc, char *argv[])
 	remove(zip_filepath);
 
 	memset(&zip, 0, sizeof(zip));
-	mz_zip_writer_init_file(&zip, zip_filepath, 0);
+	status = mz_zip_writer_init_file(&zip, zip_filepath, 0);
+    if (!status)
+    {
+        puts("mz_zip_writer_init_file failed!");
+        return EXIT_FAILURE;
+    }
 
 	for (int i = 2; i < argc; i++)
 	{
@@ -46,7 +55,17 @@ int nanozip_main(int argc, char *argv[])
 		}
 	}
 
-    mz_zip_writer_finalize_archive(&zip);
-	mz_zip_writer_end(&zip);
+    status = mz_zip_writer_finalize_archive(&zip);
+    if (!status)
+    {
+        puts("mz_zip_writer_finalize_archive failed!");
+        return EXIT_FAILURE;
+    }
+	status = mz_zip_writer_end(&zip);
+    if (!status)
+    {
+        puts("mz_zip_writer_end failed!");
+        return EXIT_FAILURE;
+    }
 	return EXIT_SUCCESS;
 }
