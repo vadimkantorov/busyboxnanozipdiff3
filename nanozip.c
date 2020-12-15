@@ -6,7 +6,7 @@
 //kbuild:lib-$(CONFIG_NANOZIP) += nanozip.o
 //applet:IF_NANOZIP(APPLET(nanozip, BB_DIR_USR_BIN, BB_SUID_DROP))
 //usage:# define nanozip_trivial_usage
-//usage:				 "nanozip archive.zip"
+//usage:				 "nanozip [-r] [[-x EXCLUDED_PATH] ...] OUTPUT_NAME.zip INPUT_PATH [...]"
 
 #if defined(__GNUC__)
 	// Ensure we get the 64-bit variants of the CRT's file I/O calls
@@ -23,8 +23,6 @@
 #include <ftw.h>
 #include <libbb.h>
 #include "miniz.c"
-
-//TODO: make sure for empty directories
 
 enum { MAX_FILE_PATH_LENGTH = 1024, MAX_EXCLUDE_PATHS = 16, MAX_INPUT_PATHS = 16, USE_FDS = 15 };
 
