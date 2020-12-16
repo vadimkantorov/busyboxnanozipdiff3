@@ -9,6 +9,6 @@
 //usage:				 "diff3 [-exEX3] /tmp/d3a.?????????? /tmp/d3b.?????????? file1 file2 file3"
 
 #define __dead __attribute__((noreturn))
-#define fgetln(F, ptr) (fscanf(F, "%*[^\n]\n", NULL))
+//#define fgetln(F, ptr) (fscanf(F, "%*[^\n]\n", NULL))
 #define pledge(promises, execpromises) 0
 
