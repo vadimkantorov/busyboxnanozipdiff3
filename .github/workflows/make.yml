@@ -9,7 +9,7 @@ env:
   MAKEFLAGS: -j2
 
 jobs:
-  build:
+  make:
     runs-on: ubuntu-20.04
     steps:
       - name: Setup Emscripten
