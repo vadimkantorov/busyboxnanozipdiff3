@@ -5,6 +5,7 @@ on: workflow_dispatch
 env:
   URL_BUSYBOX: https://busybox.net/downloads/busybox-1.32.0.tar.bz2
   URL_MINIZ: https://github.com/richgel999/miniz/releases/download/2.1.0/miniz-2.1.0.zip
+  URL_DIFF3: https://raw.githubusercontent.com/openbsd/src/master/usr.bin/diff3/diff3prog.c
   MAKEFLAGS: -j2
 
 jobs:
@@ -19,7 +20,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build Native BusyBox
-        run: make $MAKEFLAGS build/native/busybox URL_BUSYBOX=$URL_BUSYBOX URL_MINIZ=$URL_MINIZ
+        run: make $MAKEFLAGS build/native/busybox URL_BUSYBOX=$URL_BUSYBOX URL_MINIZ=$URL_MINIZ URL_DIFF3=$URL_DIFF3
 
       - name: Build Wasm BusyBox
-        run: make $MAKEFLAGS build/wasm/busybox_unstripped.js URL_BUSYBOX=$URL_BUSYBOX
+        run: make $MAKEFLAGS build/wasm/busybox_unstripped.js URL_BUSYBOX=$URL_BUSYBOX URL_MINIZ=$URL_MINIZ URL_DIFF3=$URL_DIFF3
