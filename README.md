@@ -2,7 +2,9 @@
 
 Inspired by https://github.com/tbfleming/em-busybox and https://github.com/tbfleming/em-shell, this repo contains build script of BusyBox for WebAssembly without being a full fork of BusyBox, so upgrading to a new version of BusyBox is easier.
 
-In addition to BusyBox build script, this repo also contains a [custom](https://git.busybox.net/busybox/plain/docs/new-applet-HOWTO.txt) BusyBox applet [nanozip](./nanozip.c) - [miniz](https://github.com/richgel999/miniz)-based imitation of `zip` utility: `busybox nanozip [-r] [[-x EXCLUDED_PATH] ...] OUTPUT_NAME.zip INPUT_PATH [...]`.
+In addition to BusyBox build script, this repo also contains two [custom](https://git.busybox.net/busybox/plain/docs/new-applet-HOWTO.txt) BusyBox applets:
+- [nanozip](./nanozip.c) - [miniz](https://github.com/richgel999/miniz)-based imitation of `zip` utility: `busybox nanozip [-r] [[-x EXCLUDED_PATH] ...] OUTPUT_NAME.zip INPUT_PATH [...]`.
+- [diff3](https://github.com/openbsd/src/blob/master/usr.bin/diff3/diff3prog.c) - OpenBSD-based implementation of diff3: usage: `%s [-exEX3] /tmp/d3a.?????????? /tmp/d3b.?????????? file1 file2 file3\n", __progname);`
 
 [`em-shell.c`](https://github.com/tbfleming/em-shell/blob/master/runtime/em-shell.c), [`em-shell.h`](https://github.com/tbfleming/em-shell/blob/master/runtime/em-shell.h), [`em-shell.js`](https://github.com/tbfleming/em-shell/blob/master/runtime/em-shell.js), [`arch/em/Makefile`](https://github.com/tbfleming/em-busybox/blob/master/arch/em/Makefile) are taken from excellent [tbfleming/em-shell](https://github.com/tbfleming/em-shell) and [tbfleming/em-busybox](https://github.com/tbfleming/em-shell) by [Todd Fleming](https://tbfleming.github.io/).
 

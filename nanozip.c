@@ -18,8 +18,6 @@
 	#endif
 #endif
 
-#define NANOZIP_FAIL(msg) {puts(msg); return EXIT_FAILURE;}
-
 #include <ftw.h>
 #include <libbb.h>
 #include "miniz.c"
@@ -34,6 +32,10 @@ char* output;
 int recurse, num_input, num_exclude;
 
 void* ptr_zip;
+
+int nanozip_main(int argc, char *argv[]);
+int proc_entry(const char *file_path_src, const struct stat *info, const int typeflag, struct FTW *pathinfo);
+
 
 int proc_entry(const char *file_path_src, const struct stat *info, const int typeflag, struct FTW *pathinfo)
 {
