@@ -1,4 +1,4 @@
-## BusyBox + nanozip + Emscripten
+## BusyBox + Emscripten + diff3 + nanozip
 
 Inspired by https://github.com/tbfleming/em-busybox and https://github.com/tbfleming/em-shell, this repo contains build script of BusyBox for WebAssembly without being a full fork of BusyBox, so upgrading to a new version of BusyBox is easier.
 
